@@ -1,13 +1,44 @@
-import React from "react";
+import React, { Component } from "react";
+import { View, Image } from "react-native";
+import CameraRollPicker from "react-native-camera-roll-picker";
 
-import { View, Text } from "react-native";
+import styles from "./styles";
 
-// import { Container } from './styles';
+export default class App extends Component {
+  state = {
+    num: 0,
+    selected: [],
+    current: {}
+  };
 
-const Gallery = () => (
-  <View>
-    <Text>Gallery</Text>
-  </View>
-);
+  getSelectedImages = (images, current) => {
+    this.setState({
+      num: images.length,
+      selected: images,
+      current
+    });
 
-export default Gallery;
+    console.log(current);
+    console.log(images);
+  };
+
+  render() {
+    const { current } = this.state;
+    return (
+      <View style={styles.container}>
+        <View style={styles.imagePreviewContainer}>
+          <Image source={{ uri: current.uri }} style={styles.imagePreview} />
+        </View>
+        <CameraRollPicker
+          groupTypes="SavedPhotos"
+          selected={this.state.selected}
+          selectSingleItem={true}
+          assetType="Photos"
+          imagesPerRow={3}
+          imageMargin={5}
+          callback={this.getSelectedImages}
+        />
+      </View>
+    );
+  }
+}
