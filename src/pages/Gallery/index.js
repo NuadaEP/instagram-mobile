@@ -1,42 +1,64 @@
 import React, { Component } from "react";
-import { View, Image } from "react-native";
+import { View, Image, Dimensions } from "react-native";
 import CameraRollPicker from "react-native-camera-roll-picker";
+import CameraRoll from "@react-native-community/cameraroll";
+import ImageZoom from "react-native-image-pan-zoom";
 
 import styles from "./styles";
 
 export default class App extends Component {
   state = {
-    num: 0,
-    selected: [],
-    current: {}
+    current: {},
+    groupTypes: "SavedPhotos",
+    assetType: "Photos"
   };
 
-  getSelectedImages = (images, current) => {
-    this.setState({
-      num: images.length,
-      selected: images,
-      current
-    });
+  async componentDidMount() {
+    const { groupTypes, assetType } = this.state;
+    const params = {
+      first: 1,
+      groupTypes,
+      assetType
+    };
 
-    console.log(current);
-    console.log(images);
-  };
+    const { edges } = await CameraRoll.getPhotos(params);
+
+    this.setState({ current: edges[0].node.image });
+  }
 
   render() {
-    const { current } = this.state;
+    const { current, groupTypes, assetType } = this.state;
+
+    const width = current.width;
+    const height = current.height;
+
+    const widthMult = width;
+    const heightMult = height;
+
     return (
       <View style={styles.container}>
         <View style={styles.imagePreviewContainer}>
-          <Image source={{ uri: current.uri }} style={styles.imagePreview} />
+          <ImageZoom
+            cropWidth={Dimensions.get("window").width}
+            cropHeight={Dimensions.get("window").height}
+            imageWidth={widthMult}
+            imageHeight={heightMult}
+            minScale={0.1}
+          >
+            <Image source={{ uri: current.uri }} style={{ height, width }} />
+          </ImageZoom>
         </View>
         <CameraRollPicker
-          groupTypes="SavedPhotos"
-          selected={this.state.selected}
+          groupTypes={groupTypes}
           selectSingleItem={true}
-          assetType="Photos"
+          assetType={assetType}
           imagesPerRow={3}
           imageMargin={5}
-          callback={this.getSelectedImages}
+          callback={(images, current) =>
+            this.setState({
+              current
+            })
+          }
         />
       </View>
     );

@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height,
-    width
-  },
-  imagePreview: { width: 150, height: 200 }
+    width,
+    backgroundColor: "#e5e5e5"
+  }
 });
 
 export default styles;
