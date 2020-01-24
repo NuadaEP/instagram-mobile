@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { View, Image, Dimensions } from "react-native";
+import { View, Vi } from "react-native";
 import CameraRollPicker from "react-native-camera-roll-picker";
 import CameraRoll from "@react-native-community/cameraroll";
-import ImageZoom from "react-native-image-pan-zoom";
+import Video from "react-native-video";
+
+import ViewZoom from "../../components/ViewZoom";
 
 import styles from "./styles";
 
@@ -10,13 +12,23 @@ export default class App extends Component {
   state = {
     current: {},
     groupTypes: "SavedPhotos",
-    assetType: "Photos"
+    assetType: "All"
+  };
+
+  mediaContainer = mediaType => {
+    const {
+      current: { width, height, uri }
+    } = this.state;
+
+    if (mediaType == "mp4") return <Video source={uri} />;
+
+    return <ViewZoom width={width} height={height} uri={uri} />;
   };
 
   async componentDidMount() {
     const { groupTypes, assetType } = this.state;
     const params = {
-      first: 1,
+      first: 20,
       groupTypes,
       assetType
     };
@@ -28,26 +40,19 @@ export default class App extends Component {
 
   render() {
     const { current, groupTypes, assetType } = this.state;
+    const { width, height, uri } = current;
+    let mediaType;
 
-    const width = current.width;
-    const height = current.height;
+    if (uri) {
+      const uriSplited = uri.split(".");
 
-    const widthMult = width;
-    const heightMult = height;
+      mediaType = uriSplited[uriSplited.length - 1];
+    }
 
     return (
       <View style={styles.container}>
         <View style={styles.imagePreviewContainer}>
-          <ImageZoom
-            cropWidth={Dimensions.get("window").width}
-            cropHeight={Dimensions.get("window").height}
-            imageWidth={widthMult}
-            imageHeight={heightMult}
-            minScale={0.1}
-            enableCenterFocus={false}
-          >
-            <Image source={{ uri: current.uri }} style={{ height, width }} />
-          </ImageZoom>
+          <this.mediaContainer mediaType={mediaType} />
         </View>
         <CameraRollPicker
           groupTypes={groupTypes}
