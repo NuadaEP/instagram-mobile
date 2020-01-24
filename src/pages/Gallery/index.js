@@ -44,6 +44,7 @@ export default class App extends Component {
             imageWidth={widthMult}
             imageHeight={heightMult}
             minScale={0.1}
+            enableCenterFocus={false}
           >
             <Image source={{ uri: current.uri }} style={{ height, width }} />
           </ImageZoom>
