@@ -1,11 +1,17 @@
 import React, { Component } from "react";
-import { View, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Dimensions
+} from "react-native";
 import CameraRollPicker from "react-native-camera-roll-picker";
 import CameraRoll from "@react-native-community/cameraroll";
 import Video from "react-native-video";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import ViewZoom from "../../components/ViewZoom";
+import CameraRollList from "../../components/CameraRollList";
 
 import styles from "./styles";
 
@@ -66,7 +72,15 @@ export default class App extends Component {
     }
 
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            height: Dimensions.get("screen").height,
+            width: Dimensions.get("screen").width
+          }
+        ]}
+      >
         <View style={styles.imagePreviewContainer}>
           {paused ? (
             <TouchableWithoutFeedback
@@ -77,18 +91,7 @@ export default class App extends Component {
           ) : null}
           <this.mediaContainer mediaType={mediaType} />
         </View>
-        <CameraRollPicker
-          groupTypes={groupTypes}
-          selectSingleItem={true}
-          assetType={assetType}
-          imagesPerRow={4}
-          imageMargin={3}
-          callback={(images, current) =>
-            this.setState({
-              current
-            })
-          }
-        />
+        <CameraRollList />
       </View>
     );
   }

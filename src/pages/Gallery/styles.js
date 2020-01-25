@@ -10,8 +10,6 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: "center",
     alignItems: "center",
-    height,
-    width,
     backgroundColor: "#e5e5e5"
   },
   playIcon: {
