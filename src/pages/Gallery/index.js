@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { View, Vi } from "react-native";
+import { View, TouchableWithoutFeedback } from "react-native";
 import CameraRollPicker from "react-native-camera-roll-picker";
 import CameraRoll from "@react-native-community/cameraroll";
 import Video from "react-native-video";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import ViewZoom from "../../components/ViewZoom";
 
@@ -12,15 +13,30 @@ export default class App extends Component {
   state = {
     current: {},
     groupTypes: "SavedPhotos",
-    assetType: "All"
+    assetType: "All",
+    paused: false
   };
 
-  mediaContainer = mediaType => {
+  mediaContainer = ({ mediaType }) => {
     const {
-      current: { width, height, uri }
+      current: { width, height, uri },
+      paused
     } = this.state;
 
-    if (mediaType == "mp4") return <Video source={uri} />;
+    if (mediaType == "mp4")
+      return (
+        <TouchableWithoutFeedback
+          onPress={() => this.setState({ paused: !paused })}
+        >
+          <Video
+            source={{ uri }}
+            resizeMode="cover"
+            repeat={true}
+            paused={paused}
+            style={styles.video}
+          />
+        </TouchableWithoutFeedback>
+      );
 
     return <ViewZoom width={width} height={height} uri={uri} />;
   };
@@ -39,8 +55,8 @@ export default class App extends Component {
   }
 
   render() {
-    const { current, groupTypes, assetType } = this.state;
-    const { width, height, uri } = current;
+    const { current, groupTypes, assetType, paused } = this.state;
+    const { uri } = current;
     let mediaType;
 
     if (uri) {
@@ -52,14 +68,21 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.imagePreviewContainer}>
+          {paused ? (
+            <TouchableWithoutFeedback
+              onPress={() => this.setState({ paused: !paused })}
+            >
+              <Icon name="play" style={styles.playIcon} />
+            </TouchableWithoutFeedback>
+          ) : null}
           <this.mediaContainer mediaType={mediaType} />
         </View>
         <CameraRollPicker
           groupTypes={groupTypes}
           selectSingleItem={true}
           assetType={assetType}
-          imagesPerRow={3}
-          imageMargin={5}
+          imagesPerRow={4}
+          imageMargin={3}
           callback={(images, current) =>
             this.setState({
               current
