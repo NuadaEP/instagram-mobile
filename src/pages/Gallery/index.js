@@ -3,7 +3,8 @@ import {
   View,
   TouchableWithoutFeedback,
   ScrollView,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import CameraRollPicker from "react-native-camera-roll-picker";
 import CameraRoll from "@react-native-community/cameraroll";
@@ -18,9 +19,10 @@ import styles from "./styles";
 export default class App extends Component {
   state = {
     current: {},
+    images: [],
     groupTypes: "SavedPhotos",
-    assetType: "All",
-    paused: false
+    paused: false,
+    loading: true
   };
 
   mediaContainer = ({ mediaType }) => {
@@ -47,21 +49,37 @@ export default class App extends Component {
     return <ViewZoom width={width} height={height} uri={uri} />;
   };
 
+  handleMedia = image => this.setState({ current: image });
+
   async componentDidMount() {
-    const { groupTypes, assetType } = this.state;
+    const { groupTypes } = this.state;
+
     const params = {
-      first: 20,
+      first: 100,
       groupTypes,
-      assetType
+      assetType: "All",
+      mimeTypes: [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/jpeg",
+        "video/mp4"
+      ]
     };
 
     const { edges } = await CameraRoll.getPhotos(params);
 
-    this.setState({ current: edges[0].node.image });
+    const images = edges.map(({ node: image }) => ({
+      id: image.timestamp,
+      type: image.type,
+      ...image.image
+    }));
+
+    this.setState({ current: images[0], images, loading: false });
   }
 
   render() {
-    const { current, groupTypes, assetType, paused } = this.state;
+    const { current, images, paused, loading } = this.state;
     const { uri } = current;
     let mediaType;
 
@@ -70,6 +88,8 @@ export default class App extends Component {
 
       mediaType = uriSplited[uriSplited.length - 1];
     }
+
+    if (loading) return <ActivityIndicator size="large" />;
 
     return (
       <View
@@ -91,7 +111,10 @@ export default class App extends Component {
           ) : null}
           <this.mediaContainer mediaType={mediaType} />
         </View>
-        <CameraRollList />
+        <CameraRollList
+          images={images}
+          handleMedia={this.handleMedia.bind(this)}
+        />
       </View>
     );
   }
