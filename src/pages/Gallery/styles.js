@@ -4,7 +4,23 @@ const { height, width } = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    height,
+    width
+  },
+  headerContainer: {
+    backgroundColor: "white",
+    zIndex: 999,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10
+  },
+  groupTypes: {
+    fontSize: 18,
+    marginLeft: 10
+  },
+  headerActions: {
+    flexDirection: "row"
   },
   imagePreviewContainer: {
     flex: 2,

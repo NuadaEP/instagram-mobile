@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import {
   View,
+  Text,
   TouchableWithoutFeedback,
   ScrollView,
-  Dimensions,
   ActivityIndicator
 } from "react-native";
-import CameraRollPicker from "react-native-camera-roll-picker";
 import CameraRoll from "@react-native-community/cameraroll";
 import Video from "react-native-video";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -25,13 +24,13 @@ export default class App extends Component {
     loading: true
   };
 
-  mediaContainer = ({ mediaType }) => {
+  mediaContainer = () => {
     const {
-      current: { width, height, uri },
+      current: { width, height, uri, type },
       paused
     } = this.state;
 
-    if (mediaType == "mp4")
+    if (type == "video/mp4")
       return (
         <TouchableWithoutFeedback
           onPress={() => this.setState({ paused: !paused })}
@@ -79,28 +78,19 @@ export default class App extends Component {
   }
 
   render() {
-    const { current, images, paused, loading } = this.state;
-    const { uri } = current;
-    let mediaType;
-
-    if (uri) {
-      const uriSplited = uri.split(".");
-
-      mediaType = uriSplited[uriSplited.length - 1];
-    }
+    const { images, paused, loading } = this.state;
 
     if (loading) return <ActivityIndicator size="large" />;
 
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            height: Dimensions.get("screen").height,
-            width: Dimensions.get("screen").width
-          }
-        ]}
-      >
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <View style={styles.headerActions}>
+            <Icon name="times" size={22} />
+            <Text style={styles.groupTypes}>Galeria</Text>
+          </View>
+          <Text style={[styles.groupTypes, { color: "blue" }]}>Avançar</Text>
+        </View>
         <View style={styles.imagePreviewContainer}>
           {paused ? (
             <TouchableWithoutFeedback
@@ -109,7 +99,7 @@ export default class App extends Component {
               <Icon name="play" style={styles.playIcon} />
             </TouchableWithoutFeedback>
           ) : null}
-          <this.mediaContainer mediaType={mediaType} />
+          <this.mediaContainer />
         </View>
         <CameraRollList
           images={images}
