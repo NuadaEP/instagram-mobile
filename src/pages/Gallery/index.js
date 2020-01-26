@@ -20,6 +20,7 @@ export default class App extends Component {
     current: {},
     images: [],
     groupTypes: "SavedPhotos",
+    first: 100,
     paused: false,
     loading: true
   };
@@ -48,13 +49,16 @@ export default class App extends Component {
     return <ViewZoom width={width} height={height} uri={uri} />;
   };
 
-  handleMedia = image => this.setState({ current: image });
+  handleMedia = image => {
+    this.refs._scrollView.scrollTo({ x: 0, y: 0, animated: true });
+    this.setState({ current: image });
+  };
 
-  async componentDidMount() {
+  getPhotos = async (first = 100) => {
     const { groupTypes } = this.state;
 
     const params = {
-      first: 100,
+      first,
       groupTypes,
       assetType: "All",
       mimeTypes: [
@@ -75,15 +79,19 @@ export default class App extends Component {
     }));
 
     this.setState({ current: images[0], images, loading: false });
+  };
+
+  async componentDidMount() {
+    await this.getPhotos();
   }
 
   render() {
-    const { images, paused, loading } = this.state;
+    const { images, paused, loading, first } = this.state;
 
     if (loading) return <ActivityIndicator size="large" />;
 
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container} ref="_scrollView">
         <View style={styles.headerContainer}>
           <View style={styles.headerActions}>
             <Icon name="times" size={22} />
@@ -104,8 +112,10 @@ export default class App extends Component {
         <CameraRollList
           images={images}
           handleMedia={this.handleMedia.bind(this)}
+          loadMore={this.getPhotos.bind(this)}
+          first={first}
         />
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   imagePreviewContainer: {
-    flex: 2,
+    height: height / 2,
+    width,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#e5e5e5"

@@ -5,7 +5,7 @@ import CameraRollItem from "../CameraRollItem";
 
 import styles from "./styles";
 
-CameraRollList = ({ images, handleMedia }) => (
+CameraRollList = ({ images, handleMedia, loadMore, first }) => (
   <View style={styles.container}>
     <FlatList
       data={images}
@@ -16,6 +16,12 @@ CameraRollList = ({ images, handleMedia }) => (
       columnWrapperStyle={styles.columnWrapper}
       numColumns={4}
       style={{ flex: 2 }}
+      onEndReached={() => {
+        first = first + 100;
+
+        loadMore(first);
+      }}
+      onEndReachedThreshold={0.1}
     />
   </View>
 );
