@@ -5015,6 +5015,12 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.3:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
+"react-native-camera@git+https://git@github.com/react-native-community/react-native-camera.git":
+  version "3.15.1"
+  resolved "git+https://git@github.com/react-native-community/react-native-camera.git#cd4c8f24e396e6b86d4873262db33766182e0495"
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-gesture-handler@^1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.5.3.tgz#191b44701fab7ba54c27a2438cb5eaa252666e66"

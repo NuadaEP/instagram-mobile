@@ -21,7 +21,7 @@ export default class App extends Component {
     current: {},
     images: [],
     groupTypes: "SavedPhotos",
-    first: 100,
+    first: 200,
     paused: false,
     loading: true
   };
