@@ -9,6 +9,7 @@ import {
 import CameraRoll from "@react-native-community/cameraroll";
 import Video from "react-native-video";
 import Icon from "react-native-vector-icons/FontAwesome";
+import ImageEditor from "@react-native-community/image-editor";
 
 import ViewZoom from "../../components/ViewZoom";
 import CameraRollList from "../../components/CameraRollList";
@@ -46,7 +47,14 @@ export default class App extends Component {
         </TouchableWithoutFeedback>
       );
 
-    return <ViewZoom width={width} height={height} uri={uri} />;
+    return (
+      <ViewZoom
+        width={width}
+        height={height}
+        uri={uri}
+        ref={viewZoom => (this.viewZoom = viewZoom)}
+      />
+    );
   };
 
   handleMedia = image => {
@@ -81,8 +89,20 @@ export default class App extends Component {
     this.setState({ current: images[0], images, loading: false });
   };
 
-  async componentDidMount() {
-    await this.getPhotos();
+  handleCrop = async () => {
+    const { current } = this.state;
+    const offset = this.refs.viewZoom.getOffset();
+    const cropData = {
+      offset,
+      size: { width: current.width, height: current.height }
+    };
+    const response = await ImageEditor.cropImage(current.uri, cropData);
+
+    console.log(response);
+  };
+
+  componentDidMount() {
+    this.getPhotos();
   }
 
   render() {
