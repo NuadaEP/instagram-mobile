@@ -11,10 +11,22 @@ export default class CameraInterface extends Component {
     flash: "auto"
   };
 
-  takePicture = async () => {
+  dispachAction = async () => {
+    const { only } = this.props;
+    let data;
+
     if (this.camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = await this.camera.takePictureAsync(options);
+      if (only == "video") {
+        const options = {
+          quality: "780p",
+          maxDuration: 15,
+          maxFileSize: 1000000
+        };
+        data = await this.camera.recordAsync(options);
+      } else {
+        const options = { quality: 0.5, base64: true };
+        data = await this.camera.takePictureAsync(options);
+      }
       console.log(data.uri);
     }
   };
@@ -70,6 +82,7 @@ export default class CameraInterface extends Component {
           androidRecordAudioPermissionOptions={
             androidRecordAudioPermissionOptions
           }
+          record
         />
         <View style={styles.controlsContainer}>
           <TouchableOpacity onPress={() => this.changeCamera()}>
@@ -93,7 +106,7 @@ export default class CameraInterface extends Component {
         </View>
         <View style={styles.footer}>
           <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
+            onPress={() => this.dispachAction()}
             style={styles.capture}
           >
             <View style={styles.buttonIcon} />
