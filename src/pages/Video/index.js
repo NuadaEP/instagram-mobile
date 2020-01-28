@@ -1,13 +1,7 @@
 import React from "react";
 
-import { View, Text } from "react-native";
+import CameraInterface from "../../components/CameraInterface";
 
-// import { Container } from './styles';
-
-const Video = () => (
-  <View>
-    <Text>Video</Text>
-  </View>
-);
+const Video = () => <CameraInterface />;
 
 export default Video;
