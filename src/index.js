@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React, { Component } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, PermissionsAndroid } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 import Gallery from "./pages/Gallery";
@@ -12,12 +12,12 @@ export default class App extends Component {
     index: 0,
     routes: [
       {
-        key: "photo",
-        title: "Foto"
-      },
-      {
         key: "gallery",
         title: "Galeria"
+      },
+      {
+        key: "photo",
+        title: "Foto"
       },
       {
         key: "video",
@@ -27,8 +27,8 @@ export default class App extends Component {
   };
 
   renderScene = SceneMap({
-    photo: Photo,
     gallery: Gallery,
+    photo: Photo,
     video: Video
   });
 
@@ -42,6 +42,49 @@ export default class App extends Component {
       labelStyle={{ fontSize: 14 }}
     />
   );
+
+  async componentDidMount() {
+    await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+      title: "Camera Permission",
+      message: "This app needs access to your camera",
+      buttonNeutral: "Ask Me Later",
+      buttonNegative: "Cancel",
+      buttonPositive: "OK"
+    });
+
+    await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+        title: "Read Store Permission",
+        message: "This app needs access to your files",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+
+    await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: "Write Store Permission",
+        message: "This app needs use your local storage",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+
+    await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      {
+        title: "Record Store Permission",
+        message: "This app needs your permission to record",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+  }
 
   render() {
     const initialLayout = { width: Dimensions.get("window").width };

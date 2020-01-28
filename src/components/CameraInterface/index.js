@@ -19,8 +19,7 @@ export default class CameraInterface extends Component {
       if (only == "video") {
         const options = {
           quality: "780p",
-          maxDuration: 15,
-          maxFileSize: 1000000
+          maxDuration: 10
         };
         data = await this.camera.recordAsync(options);
       } else {
