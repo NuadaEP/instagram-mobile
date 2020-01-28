@@ -12,12 +12,12 @@ export default class App extends Component {
     index: 0,
     routes: [
       {
-        key: "gallery",
-        title: "Galeria"
-      },
-      {
         key: "photo",
         title: "Foto"
+      },
+      {
+        key: "gallery",
+        title: "Galeria"
       },
       {
         key: "video",
@@ -27,8 +27,8 @@ export default class App extends Component {
   };
 
   renderScene = SceneMap({
-    gallery: Gallery,
     photo: Photo,
+    gallery: Gallery,
     video: Video
   });
 
