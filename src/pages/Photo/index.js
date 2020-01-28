@@ -1,47 +1,15 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { RNCamera } from "react-native-camera";
+import Icon from "react-native-vector-icons/FontAwesome5";
+
+import styles from "./styles";
 
 export default class Photo extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          androidCameraPermissionOptions={{
-            title: "Permission to use camera",
-            message: "We need your permission to use your camera",
-            buttonPositive: "Ok",
-            buttonNegative: "Cancel"
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: "Permission to use audio recording",
-            message: "We need your permission to use your audio",
-            buttonPositive: "Ok",
-            buttonNegative: "Cancel"
-          }}
-          onGoogleVisionBarcodesDetected={({ barcodes }) => {
-            console.log(barcodes);
-          }}
-        />
-        <View
-          style={{ flex: 0, flexDirection: "row", justifyContent: "center" }}
-        >
-          <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
-            style={styles.capture}
-          >
-            <Text style={{ fontSize: 14 }}> SNAP </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+  state = {
+    camera: "back",
+    flash: "auto"
+  };
 
   takePicture = async () => {
     if (this.camera) {
@@ -50,26 +18,88 @@ export default class Photo extends Component {
       console.log(data.uri);
     }
   };
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    backgroundColor: "black"
-  },
-  preview: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center"
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: "center",
-    margin: 20
+  changeCamera = () => {
+    const { camera } = this.state;
+
+    let obj = { camera: "back" };
+
+    if (camera == "back") obj = { camera: "front", flash: "auto" };
+
+    this.setState(obj);
+  };
+
+  switchFlash = () => {
+    const { flash } = this.state;
+
+    let obj = { flash: "on" };
+
+    if (flash == "on") obj = { flash: "off" };
+
+    this.setState(obj);
+  };
+
+  render() {
+    const { Type, FlashMode } = RNCamera.Constants;
+    const { camera, flash } = this.state;
+
+    const androidCameraPermissionOptions = {
+      title: "Permission to use camera",
+      message: "We need your permission to use your camera",
+      buttonPositive: "Ok",
+      buttonNegative: "Cancel"
+    };
+
+    const androidRecordAudioPermissionOptions = {
+      title: "Permission to use audio recording",
+      message: "We need your permission to use your audio",
+      buttonPositive: "Ok",
+      buttonNegative: "Cancel"
+    };
+
+    return (
+      <View style={styles.container}>
+        <RNCamera
+          ref={ref => {
+            this.camera = ref;
+          }}
+          style={styles.preview}
+          type={camera == "back" ? Type.back : Type.front}
+          flashMode={flash == "on" ? FlashMode.on : FlashMode.off}
+          androidCameraPermissionOptions={androidCameraPermissionOptions}
+          androidRecordAudioPermissionOptions={
+            androidRecordAudioPermissionOptions
+          }
+        />
+        <View style={styles.controlsContainer}>
+          <TouchableOpacity onPress={() => this.changeCamera()}>
+            <Icon name="sync" color="white" size={20} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.switchFlash()}
+            style={[
+              styles.flashButton,
+              {
+                backgroundColor: flash == "on" ? "white" : "transparent"
+              }
+            ]}
+          >
+            <Icon
+              name="bolt"
+              color={flash == "on" ? "black" : "white"}
+              size={20}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.footer}>
+          <TouchableOpacity
+            onPress={this.takePicture.bind(this)}
+            style={styles.capture}
+          >
+            <View style={styles.buttonIcon} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   }
-});
+}
