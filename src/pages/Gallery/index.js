@@ -19,11 +19,8 @@ import styles from "./styles";
 export default class App extends Component {
   state = {
     current: {},
-    images: [],
     groupTypes: "SavedPhotos",
-    first: 200,
-    paused: false,
-    loading: true
+    paused: false
   };
 
   mediaContainer = () => {
@@ -62,33 +59,6 @@ export default class App extends Component {
     this.setState({ current: image });
   };
 
-  getPhotos = async (first = 100) => {
-    const { groupTypes } = this.state;
-
-    const params = {
-      first,
-      groupTypes,
-      assetType: "All",
-      mimeTypes: [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/jpeg",
-        "video/mp4"
-      ]
-    };
-
-    const { edges } = await CameraRoll.getPhotos(params);
-
-    const images = edges.map(({ node: image }) => ({
-      id: image.timestamp,
-      type: image.type,
-      ...image.image
-    }));
-
-    this.setState({ current: images[0], images, loading: false });
-  };
-
   handleCrop = async () => {
     const { current } = this.state;
     const offset = this.refs.viewZoom.getOffset();
@@ -101,14 +71,8 @@ export default class App extends Component {
     console.log(response);
   };
 
-  componentDidMount() {
-    this.getPhotos();
-  }
-
   render() {
-    const { images, paused, loading, first } = this.state;
-
-    if (loading) return <ActivityIndicator size="large" />;
+    const { paused } = this.state;
 
     return (
       <ScrollView style={styles.container} ref="_scrollView">
@@ -129,12 +93,7 @@ export default class App extends Component {
           ) : null}
           <this.mediaContainer />
         </View>
-        <CameraRollList
-          images={images}
-          handleMedia={this.handleMedia.bind(this)}
-          loadMore={this.getPhotos.bind(this)}
-          first={first}
-        />
+        <CameraRollList handleMedia={this.handleMedia.bind(this)} />
       </ScrollView>
     );
   }
