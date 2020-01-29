@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator } from "react-native";
+import { View, FlatList, ActivityIndicator, Dimensions } from "react-native";
 import CameraRoll from "@react-native-community/cameraroll";
 
 import CameraRollItem from "../CameraRollItem";
@@ -43,13 +43,13 @@ export default class CameraRollList extends Component {
       ...image.image
     }));
 
-    let updateState = { images, loading: false };
+    let updateState = { images, loading: false, first: loadFirst };
 
-    if (!loading) updateState = { images };
-
-    this.setState(updateState);
+    if (!loading) updateState = { images, first: loadFirst };
 
     await handleMedia(images[0]);
+
+    this.setState(updateState);
   };
 
   componentDidMount() {
@@ -57,7 +57,7 @@ export default class CameraRollList extends Component {
   }
 
   render() {
-    const { images, first, loading } = this.state;
+    const { images, loading } = this.state;
     const { handleMedia } = this.props;
 
     if (loading) return <ActivityIndicator size="large" />;
@@ -66,15 +66,15 @@ export default class CameraRollList extends Component {
       <View style={styles.container}>
         <FlatList
           data={images}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <CameraRollItem image={item} handleMedia={handleMedia} />
           )}
           keyExtractor={item => String(Math.random() * item.id)}
           columnWrapperStyle={styles.columnWrapper}
           numColumns={4}
           style={{ flex: 2 }}
-          onEndReached={() => this.getPhotos}
-          onEndReachedThreshold={0.1}
+          // onEndReached={this.getPhotos}
+          // onEndReachedThreshold={0.2}
         />
       </View>
     );
