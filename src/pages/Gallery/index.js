@@ -1,18 +1,12 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  ScrollView,
-  ActivityIndicator
-} from "react-native";
-import CameraRoll from "@react-native-community/cameraroll";
+import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
 import Video from "react-native-video";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ImageEditor from "@react-native-community/image-editor";
 
 import ViewZoom from "../../components/ViewZoom";
 import CameraRollList from "../../components/CameraRollList";
+import CameraRollHeader from "../../components/CameraRollHeader";
 
 import styles from "./styles";
 
@@ -76,13 +70,7 @@ export default class App extends Component {
 
     return (
       <ScrollView style={styles.container} ref="_scrollView">
-        <View style={styles.headerContainer}>
-          <View style={styles.headerActions}>
-            <Icon name="times" size={22} />
-            <Text style={styles.groupTypes}>Galeria</Text>
-          </View>
-          <Text style={[styles.groupTypes, { color: "blue" }]}>Avançar</Text>
-        </View>
+        <CameraRollHeader />
         <View style={styles.imagePreviewContainer}>
           {paused ? (
             <TouchableWithoutFeedback

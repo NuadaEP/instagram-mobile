@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { RNCamera } from "react-native-camera";
 import Icon from "react-native-vector-icons/FontAwesome5";
+
+import CameraRollHeader from "../../components/CameraRollHeader";
 
 import styles from "./styles";
 
@@ -25,7 +27,9 @@ export default class CameraInterface extends Component {
     this.setState({ recording: false });
   };
 
-  stopRecording = () => this.camera.stopRecording();
+  stopRecording = () => {
+    this.camera.stopRecording();
+  };
 
   takePhoto = async () =>
     await this.camera.takePictureAsync({ quality: 0.5, base64: true });
@@ -83,6 +87,10 @@ export default class CameraInterface extends Component {
 
     return (
       <View style={styles.container}>
+        <CameraRollHeader
+          title={only == "video" ? "Video" : "Phoro"}
+          nextEnabled={false}
+        />
         <RNCamera
           ref={ref => {
             this.camera = ref;
@@ -100,28 +108,29 @@ export default class CameraInterface extends Component {
           <TouchableOpacity onPress={() => this.changeCamera()}>
             <Icon name="sync" color="white" size={20} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.switchFlash()}
-            style={[
-              styles.flashButton,
-              {
-                backgroundColor: flash == "on" ? "white" : "transparent"
-              }
-            ]}
-          >
-            <Icon
-              name="bolt"
-              color={flash == "on" ? "black" : "white"}
-              size={20}
-            />
-          </TouchableOpacity>
+          {only == "photo" ? (
+            <TouchableOpacity
+              onPress={() => this.switchFlash()}
+              style={[
+                styles.flashButton,
+                {
+                  backgroundColor: flash == "on" ? "white" : "transparent"
+                }
+              ]}
+            >
+              <Icon
+                name="bolt"
+                color={flash == "on" ? "black" : "white"}
+                size={20}
+              />
+            </TouchableOpacity>
+          ) : null}
         </View>
         <View style={styles.footer}>
-          {recording ? <Text>Gravando</Text> : null}
           <TouchableOpacity
             onPress={() => this.dispachAction()}
             onLongPress={() => this.dispachAction()}
-            onPressOut={() => (recording ? this.camera.stopRecording() : false)}
+            onPressOut={() => (recording ? this.stopRecording() : false)}
             style={styles.capture}
           >
             <View style={styles.buttonIcon} />
