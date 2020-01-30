@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { RNCamera } from "react-native-camera";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -8,26 +8,38 @@ import styles from "./styles";
 export default class CameraInterface extends Component {
   state = {
     camera: "back",
-    flash: "auto"
+    flash: "off",
+    recording: false
   };
 
-  dispachAction = async () => {
-    const { only } = this.props;
-    let data;
+  recordVideo = async () => {
+    this.setState({ recording: true });
 
-    if (this.camera) {
-      if (only == "video") {
-        const options = {
-          quality: "780p",
-          maxDuration: 10
-        };
-        data = await this.camera.recordAsync(options);
-      } else {
-        const options = { quality: 0.5, base64: true };
-        data = await this.camera.takePictureAsync(options);
-      }
-      console.log(data.uri);
+    const options = {
+      quality: "780p",
+      maxDuration: 10
+    };
+
+    await this.camera.recordAsync(options);
+
+    this.setState({ recording: false });
+  };
+
+  stopRecording = () => this.camera.stopRecording();
+
+  takePhoto = async () =>
+    await this.camera.takePictureAsync({ quality: 0.5, base64: true });
+
+  dispachAction = () => {
+    const { only } = this.props;
+    const { recording } = this.state;
+
+    if (only == "video") {
+      if (recording) return this.stopRecording();
+
+      return this.recordVideo();
     }
+    return this.takePhoto();
   };
 
   changeCamera = () => {
@@ -51,8 +63,9 @@ export default class CameraInterface extends Component {
   };
 
   render() {
+    const { camera, flash, recording } = this.state;
+    const { only } = this.props;
     const { Type, FlashMode } = RNCamera.Constants;
-    const { camera, flash } = this.state;
 
     const androidCameraPermissionOptions = {
       title: "Permission to use camera",
@@ -77,11 +90,11 @@ export default class CameraInterface extends Component {
           style={styles.preview}
           type={camera == "back" ? Type.back : Type.front}
           flashMode={flash == "on" ? FlashMode.on : FlashMode.off}
+          record={only == "video" ? true : false}
           androidCameraPermissionOptions={androidCameraPermissionOptions}
           androidRecordAudioPermissionOptions={
             androidRecordAudioPermissionOptions
           }
-          record
         />
         <View style={styles.controlsContainer}>
           <TouchableOpacity onPress={() => this.changeCamera()}>
@@ -104,8 +117,11 @@ export default class CameraInterface extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.footer}>
+          {recording ? <Text>Gravando</Text> : null}
           <TouchableOpacity
             onPress={() => this.dispachAction()}
+            onLongPress={() => this.dispachAction()}
+            onPressOut={() => (recording ? this.camera.stopRecording() : false)}
             style={styles.capture}
           >
             <View style={styles.buttonIcon} />

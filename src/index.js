@@ -26,12 +26,6 @@ export default class App extends Component {
     ]
   };
 
-  renderScene = SceneMap({
-    gallery: Gallery,
-    photo: Photo,
-    video: Video
-  });
-
   renderTabBar = props => (
     <TabBar
       {...props}
@@ -87,12 +81,17 @@ export default class App extends Component {
   }
 
   render() {
+    const renderScene = SceneMap({
+      gallery: Gallery,
+      photo: Photo,
+      video: Video
+    });
     const initialLayout = { width: Dimensions.get("window").width };
 
     return (
       <TabView
         navigationState={this.state}
-        renderScene={this.renderScene}
+        renderScene={renderScene}
         onIndexChange={index => this.setState({ index })}
         initialLayout={initialLayout}
         swipeEnabled={true}
