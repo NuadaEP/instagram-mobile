@@ -6,6 +6,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Gallery from "./pages/Gallery";
 import Photo from "./pages/Photo";
 import Video from "./pages/Video";
+import PublishDescription from "./components/PublishDescription";
 
 export default class App extends Component {
   state = {
@@ -22,6 +23,10 @@ export default class App extends Component {
       {
         key: "video",
         title: "Vídeo"
+      },
+      {
+        key: "publishDescription",
+        title: "Publish"
       }
     ]
   };
@@ -84,7 +89,8 @@ export default class App extends Component {
     const renderScene = SceneMap({
       gallery: Gallery,
       photo: Photo,
-      video: Video
+      video: Video,
+      publishDescription: PublishDescription
     });
     const initialLayout = { width: Dimensions.get("window").width };
 
