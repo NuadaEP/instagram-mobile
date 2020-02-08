@@ -10,7 +10,7 @@ import CameraRollHeader from "../../components/CameraRollHeader";
 
 import styles from "./styles";
 
-export default class App extends Component {
+export default class Gallery extends Component {
   state = {
     current: {},
     groupTypes: "SavedPhotos",
@@ -85,4 +85,9 @@ export default class App extends Component {
       </ScrollView>
     );
   }
+}
+
+
+Gallery.navigationOptions = {
+  tabBarIcon: ({ tintColor }) => <Icon name="home" size={20} color={tintColor} />
 }
