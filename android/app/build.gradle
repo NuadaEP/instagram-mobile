@@ -139,6 +139,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-screens')
+    implementation project(':react-native-safe-area-context')
+    implementation project(':@react-native-community_masked-view')
     implementation (project(':react-native-camera')) {
         exclude group: "com.google.android.gms"
         implementation 'com.android.support:exifinterface:27.+'

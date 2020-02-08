@@ -3,6 +3,9 @@ package com.instagrampublish;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.rnscreens.RNScreensPackage;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
+import org.reactnative.maskedview.RNCMaskedViewPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.reactnativecommunity.imageeditor.ImageEditorPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -30,6 +33,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNScreensPackage(),
+            new SafeAreaContextPackage(),
+            new RNCMaskedViewPackage(),
             new RNCameraPackage(),
             new ImageEditorPackage(),
             new VectorIconsPackage(),
