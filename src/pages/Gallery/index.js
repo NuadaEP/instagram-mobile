@@ -87,7 +87,6 @@ export default class Gallery extends Component {
   }
 }
 
-
 Gallery.navigationOptions = {
   tabBarIcon: ({ tintColor }) => <Icon name="home" size={20} color={tintColor} />
 }
