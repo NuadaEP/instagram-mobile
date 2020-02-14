@@ -16,7 +16,6 @@ export default class Gallery extends Component {
     groupTypes: "SavedPhotos",
     paused: false
   };
-
   mediaContainer = () => {
     const {
       current: { width, height, uri, type },
@@ -55,22 +54,28 @@ export default class Gallery extends Component {
 
   handleCrop = async () => {
     const { current } = this.state;
-    const offset = this.refs.viewZoom.getOffset();
+    const offset = this.viewZoom.getOffset();
     const cropData = {
       offset,
       size: { width: current.width, height: current.height }
     };
-    const response = await ImageEditor.cropImage(current.uri, cropData);
-
-    console.log(response);
+    return await ImageEditor.cropImage(current.uri, cropData);
   };
+
+  handleFunction = async () => {
+    const { navigation } = this.props;
+
+    const response = await this.handleCrop();
+
+    navigation.navigate('Publish', { response });
+  }
 
   render() {
     const { paused } = this.state;
 
     return (
       <ScrollView style={styles.container} ref="_scrollView">
-        <CameraRollHeader />
+        <CameraRollHeader handleFunction={this.handleFunction.bind(this)} />
         <View style={styles.imagePreviewContainer}>
           {paused ? (
             <TouchableWithoutFeedback

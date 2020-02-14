@@ -6,18 +6,17 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from "./styles";
 
-import img from "../../assets/aa.jpg"
+export default function Publish({ navigation }) {
 
-export default function Publish({ image }) {
+  const { state: { params } } = navigation;
+
+  console.log(params ? params.response : 'xereca');
+
   return (
     <ScrollView style={styles.container}>
       <CameraRollHeader title="Publish" />
       <View>
         <View style={styles.inputView}>
-          <Image
-            source={img}
-            style={styles.imagePreviewContainer}
-          />
           <TextInput
             style={styles.input}
             placeholder="Write a thing..."

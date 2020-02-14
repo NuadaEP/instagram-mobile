@@ -19,12 +19,13 @@ export default class CameraInterface extends Component {
 
     const options = {
       quality: "780p",
-      maxDuration: 10
+      maxDuration: 10,
+      pauseAfterCapture: true,
     };
 
-    await this.camera.recordAsync(options);
-
     this.setState({ recording: false });
+
+    return await this.camera.recordAsync(options)
   };
 
   stopRecording = () => {
@@ -34,16 +35,20 @@ export default class CameraInterface extends Component {
   takePhoto = async () =>
     await this.camera.takePictureAsync({ quality: 0.5, base64: true });
 
-  dispachAction = () => {
-    const { only } = this.props;
+  dispachAction = async () => {
+    const { only, navigation } = this.props;
     const { recording } = this.state;
 
     if (only == "video") {
       if (recording) return this.stopRecording();
 
-      return this.recordVideo();
+      const response = await this.recordVideo();
+
+      navigation.navigate('Publish', { response: response.uri });
     }
-    return this.takePhoto();
+    const response = await this.takePhoto();
+
+    navigation.navigate('Publish', { response: response.uri });
   };
 
   changeCamera = () => {

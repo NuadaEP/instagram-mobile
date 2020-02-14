@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   input: {
-    width: "80%"
   },
   inputView: {
     flex: 1,

@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import CameraInterface from "../../components/CameraInterface";
 
-const Photo = () => <CameraInterface only="photo" />;
+const Photo = ({ navigation }) => <CameraInterface navigation={navigation} only="photo" />;
 
 export default Photo;
 

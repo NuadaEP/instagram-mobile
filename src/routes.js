@@ -6,7 +6,6 @@ import Video from './pages/Video';
 
 import Publish from './components/Publish';
 
-
 const Routes = () =>
   createAppContainer(
     createBottomTabNavigator({
