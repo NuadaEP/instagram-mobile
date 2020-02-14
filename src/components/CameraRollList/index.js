@@ -73,8 +73,8 @@ export default class CameraRollList extends Component {
           columnWrapperStyle={styles.columnWrapper}
           numColumns={4}
           style={{ flex: 2 }}
-          // onEndReached={this.getPhotos}
-          // onEndReachedThreshold={0.2}
+        // onEndReached={this.getPhotos}
+        // onEndReachedThreshold={0.2}
         />
       </View>
     );
