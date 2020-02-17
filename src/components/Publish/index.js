@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import CameraRollHeader from "../../components/CameraRollHeader";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -10,13 +10,12 @@ export default function Publish({ navigation }) {
 
   const { state: { params } } = navigation;
 
-  console.log(params ? params.response : 'xereca');
-
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <CameraRollHeader title="Publish" />
-      <View>
+      <View style={styles.inputsContainer}>
         <View style={styles.inputView}>
+          <Image source={{ uri: params.response }} style={styles.imagePreviewContainer} />
           <TextInput
             style={styles.input}
             placeholder="Write a thing..."
@@ -37,7 +36,7 @@ export default function Publish({ navigation }) {
           <Text>Also post to</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 

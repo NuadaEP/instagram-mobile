@@ -1,13 +1,23 @@
 import React from "react";
 
+import { withNavigationFocus } from 'react-navigation';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import CameraInterface from "../../components/CameraInterface";
 
-const Video = ({ navigation }) => <CameraInterface navigation={navigation} only="video" />;
+function Video({ navigation }) {
+  const { isFocused } = navigation;
 
-export default Video;
+  return (
+    <>
+      {isFocused() && <CameraInterface navigation={navigation} only="video" />}
+    </>
+  )
+}
 
 Video.navigationOptions = {
   tabBarIcon: ({ tintColor }) => <Icon name="videocam" size={20} color={tintColor} />
 }
+
+export default withNavigationFocus(Video);

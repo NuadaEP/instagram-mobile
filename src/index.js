@@ -7,7 +7,8 @@ import App from './App';
 export default class Index extends Component {
   // const Index = () => {
   async componentDidMount() {
-    await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+    await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA, {
       title: "Camera Permission",
       message: "This app needs access to your camera",
       buttonNeutral: "Ask Me Later",

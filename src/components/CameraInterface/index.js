@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, CameraRoll } from "react-native";
 import { RNCamera } from "react-native-camera";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -15,29 +15,46 @@ export default class CameraInterface extends Component {
   };
 
   recordVideo = async () => {
-    this.setState({ recording: true });
+    try {
+      this.setState({ recording: true });
 
-    const options = {
-      quality: "780p",
-      maxDuration: 10,
-      pauseAfterCapture: true,
-    };
+      const options = {
+        quality: "780p",
+        maxDuration: 10,
+        pauseAfterCapture: true,
+      };
 
-    this.setState({ recording: false });
+      this.setState({ recording: false });
 
-    return await this.camera.recordAsync(options)
+      return await this.camera.recordAsync(options);
+    } catch (error) {
+      this.setState({ recording: false });
+
+      // console.log(error);
+    }
   };
 
   stopRecording = () => {
     this.camera.stopRecording();
   };
 
-  takePhoto = async () =>
-    await this.camera.takePictureAsync({ quality: 0.5, base64: true });
+  takePhoto = async (camera) => {
+    try {
+      // const { camera } = this.state;
+      if (camera) {
+        const options = { quality: 0.5, base64: true };
+
+        return await this.camera.takePictureAsync(options);
+      }
+
+    } catch (error) {
+      // console.log(error);
+    }
+  }
 
   dispachAction = async () => {
     const { only, navigation } = this.props;
-    const { recording } = this.state;
+    const { recording, camera } = this.state;
 
     if (only == "video") {
       if (recording) return this.stopRecording();
@@ -46,7 +63,9 @@ export default class CameraInterface extends Component {
 
       navigation.navigate('Publish', { response: response.uri });
     }
-    const response = await this.takePhoto();
+    const response = await this.takePhoto(camera);
+
+    await CameraRoll.saveToCameraRoll(response.uri)
 
     navigation.navigate('Publish', { response: response.uri });
   };
@@ -93,7 +112,7 @@ export default class CameraInterface extends Component {
     return (
       <View style={styles.container}>
         <CameraRollHeader
-          title={only == "video" ? "Video" : "Phoro"}
+          title={only == "video" ? "Video" : "Photo"}
           nextEnabled={false}
         />
         <RNCamera

@@ -20,8 +20,6 @@ export default class CameraRollList extends Component {
 
     const loadFirst = first + 100;
 
-    console.log(loadFirst);
-
     const params = {
       first: loadFirst,
       groupTypes,

@@ -72,7 +72,6 @@ export default class Gallery extends Component {
 
   render() {
     const { paused } = this.state;
-    console.log(this.state.current);
 
     return (
       <ScrollView style={styles.container} ref="_scrollView">

@@ -7,18 +7,19 @@ const styles = StyleSheet.create({
     flex: 1,
     height,
     width,
-    paddingVertical: 10,
-    paddingHorizontal: 20
   },
   input: {
   },
+  inputsContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20
+  },
   inputView: {
-    flex: 1,
+    display: "flex",
     flexDirection: "row",
     paddingVertical: 15,
     borderBottomColor: "#e5e5e5",
     borderBottomWidth: 1,
-    alignItems: "center"
   },
   button: {
     paddingVertical: 15,
