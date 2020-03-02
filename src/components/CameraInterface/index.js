@@ -40,7 +40,6 @@ export default class CameraInterface extends Component {
 
   takePhoto = async (camera) => {
     try {
-      // const { camera } = this.state;
       if (camera) {
         const options = { quality: 0.5, base64: true };
 
@@ -65,7 +64,7 @@ export default class CameraInterface extends Component {
     }
     const response = await this.takePhoto(camera);
 
-    await CameraRoll.saveToCameraRoll(response.uri)
+    // await CameraRoll.saveToCameraRoll(response.uri)
 
     navigation.navigate('Publish', { response: response.uri });
   };
