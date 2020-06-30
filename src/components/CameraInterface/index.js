@@ -11,7 +11,7 @@ export default class CameraInterface extends Component {
   state = {
     camera: "back",
     flash: "off",
-    recording: false
+    recording: false,
   };
 
   recordVideo = async () => {
@@ -19,7 +19,7 @@ export default class CameraInterface extends Component {
 
     const options = {
       quality: "780p",
-      maxDuration: 10
+      maxDuration: 10,
     };
 
     await this.camera.recordAsync(options);
@@ -27,9 +27,7 @@ export default class CameraInterface extends Component {
     this.setState({ recording: false });
   };
 
-  stopRecording = () => {
-    this.camera.stopRecording();
-  };
+  stopRecording = () => this.camera.stopRecording();
 
   takePhoto = async () =>
     await this.camera.takePictureAsync({ quality: 0.5, base64: true });
@@ -43,6 +41,7 @@ export default class CameraInterface extends Component {
 
       return this.recordVideo();
     }
+
     return this.takePhoto();
   };
 
@@ -75,14 +74,14 @@ export default class CameraInterface extends Component {
       title: "Permission to use camera",
       message: "We need your permission to use your camera",
       buttonPositive: "Ok",
-      buttonNegative: "Cancel"
+      buttonNegative: "Cancel",
     };
 
     const androidRecordAudioPermissionOptions = {
       title: "Permission to use audio recording",
       message: "We need your permission to use your audio",
       buttonPositive: "Ok",
-      buttonNegative: "Cancel"
+      buttonNegative: "Cancel",
     };
 
     return (
@@ -92,7 +91,7 @@ export default class CameraInterface extends Component {
           nextEnabled={false}
         />
         <RNCamera
-          ref={ref => {
+          ref={(ref) => {
             this.camera = ref;
           }}
           style={styles.preview}
@@ -114,8 +113,8 @@ export default class CameraInterface extends Component {
               style={[
                 styles.flashButton,
                 {
-                  backgroundColor: flash == "on" ? "white" : "transparent"
-                }
+                  backgroundColor: flash == "on" ? "white" : "transparent",
+                },
               ]}
             >
               <Icon

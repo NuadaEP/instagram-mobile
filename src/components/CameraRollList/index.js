@@ -11,7 +11,7 @@ export default class CameraRollList extends Component {
     images: [],
     groupTypes: "SavedPhotos",
     first: 0,
-    loading: true
+    loading: true,
   };
 
   getPhotos = async () => {
@@ -19,8 +19,6 @@ export default class CameraRollList extends Component {
     const { handleMedia } = this.props;
 
     const loadFirst = first + 100;
-
-    console.log(loadFirst);
 
     const params = {
       first: loadFirst,
@@ -31,8 +29,8 @@ export default class CameraRollList extends Component {
         "image/jpg",
         "image/png",
         "image/jpeg",
-        "video/mp4"
-      ]
+        "video/mp4",
+      ],
     };
 
     const { edges } = await CameraRoll.getPhotos(params);
@@ -40,7 +38,7 @@ export default class CameraRollList extends Component {
     const images = edges.map(({ node: image }) => ({
       id: image.timestamp,
       type: image.type,
-      ...image.image
+      ...image.image,
     }));
 
     let updateState = { images, loading: false, first: loadFirst };
@@ -69,12 +67,10 @@ export default class CameraRollList extends Component {
           renderItem={({ item }) => (
             <CameraRollItem image={item} handleMedia={handleMedia} />
           )}
-          keyExtractor={item => String(Math.random() * item.id)}
+          keyExtractor={(item, index) => String(index)}
           columnWrapperStyle={styles.columnWrapper}
           numColumns={4}
           style={{ flex: 2 }}
-          // onEndReached={this.getPhotos}
-          // onEndReachedThreshold={0.2}
         />
       </View>
     );
